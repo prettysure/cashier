@@ -75,33 +75,10 @@
           <div class="section-heading compact">
             <p class="eyebrow">Step 2</p>
             <h2>Pick a payment method</h2>
+            <p class="hint">Click a payment method to open Step 3 and complete the required details.</p>
           </div>
           <div class="method-grid" id="methodGrid" aria-live="polite"></div>
         </div>
-
-        <form class="panel detail-panel" id="paymentForm">
-          <div class="section-heading">
-            <p class="eyebrow">Step 3</p>
-            <h2>Complete payment details</h2>
-            <p class="hint" id="selectedMethodHint">Select a payment method to continue.</p>
-          </div>
-
-          <div id="dynamicFields" class="dynamic-fields"></div>
-
-          <label for="payerEmail">Receipt email</label>
-          <input id="payerEmail" name="payerEmail" type="email" placeholder="name@example.com" required>
-
-          <label for="resultMode">Demo payment outcome</label>
-          <select id="resultMode" name="resultMode">
-            <option value="success">Successful</option>
-            <option value="processing">Under processing</option>
-            <option value="failed">Failed</option>
-          </select>
-
-          <button class="submit-button" type="submit" id="submitButton" disabled>
-            Submit payment
-          </button>
-        </form>
       </section>
 
       <section class="result-panel hidden" id="resultView" aria-live="polite">
@@ -123,12 +100,77 @@
             <dt>Transaction ID</dt>
             <dd id="summaryTransaction"></dd>
           </div>
+          <div>
+            <dt>Status</dt>
+            <dd id="summaryStatus"></dd>
+          </div>
         </dl>
 
         <button class="secondary-button" type="button" id="newPaymentButton">
           Make another payment
         </button>
       </section>
+
+      <section class="panel history-panel" aria-labelledby="historyTitle">
+        <div class="section-heading">
+          <p class="eyebrow">Future query</p>
+          <h2 id="historyTitle">Transaction records</h2>
+          <p class="hint">Every submitted attempt is saved in this browser and can be queried by transaction ID, method, email, status, or detail summary.</p>
+        </div>
+
+        <div class="history-actions">
+          <label for="transactionSearch">Search transactions</label>
+          <input id="transactionSearch" type="search" placeholder="Search by TX ID, email, method, or status">
+          <button class="secondary-button compact-button" type="button" id="clearHistoryButton">Clear demo records</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Transaction ID</th>
+                <th>Status</th>
+                <th>Category</th>
+                <th>Country</th>
+                <th>Payment method</th>
+                <th>Email</th>
+                <th>Payment details</th>
+                <th>Created</th>
+              </tr>
+            </thead>
+            <tbody id="transactionTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="modal-backdrop hidden" id="paymentModal" role="dialog" aria-modal="true" aria-labelledby="paymentModalTitle">
+        <form class="modal-card" id="paymentForm">
+          <div class="modal-header">
+            <div>
+              <p class="eyebrow">Step 3</p>
+              <h2 id="paymentModalTitle">Complete payment details</h2>
+              <p class="hint" id="selectedMethodHint">Select a payment method to continue.</p>
+            </div>
+            <button class="icon-button" type="button" id="closeModalButton" aria-label="Close payment details">x</button>
+          </div>
+
+          <div id="dynamicFields" class="dynamic-fields"></div>
+
+          <label for="payerEmail">Receipt email</label>
+          <input id="payerEmail" name="payerEmail" type="email" placeholder="name@example.com" required>
+
+          <label for="resultMode">Demo payment outcome</label>
+          <select id="resultMode" name="resultMode">
+            <option value="success">Successful</option>
+            <option value="processing">Under processing</option>
+            <option value="failed">Failed</option>
+          </select>
+
+          <button class="submit-button" type="submit" id="submitButton">
+            Submit payment
+          </button>
+        </form>
+      </div>
     </main>
 
     <script src="app.js"></script>

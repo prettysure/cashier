@@ -14,8 +14,12 @@ methods, complete payment details, and view a payment result state.
     India, Brazil, Mexico, Japan, South Korea, Singapore, United Arab Emirates,
     and a global fallback.
 - Method-specific detail fields for cards, wallets, bank transfers, UPI, and
-  crypto transfers.
+  crypto transfers displayed in a Step 3 pop-up after selecting a payment
+  method.
 - Demo result page for successful, failed, and under-processing payments.
+- Automatic transaction ID generation for every submitted payment attempt.
+- Browser-local transaction records table with search for future queries. Demo
+  payment details are summarized and masked where appropriate.
 
 ## Preview
 
