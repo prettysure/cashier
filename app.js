@@ -859,7 +859,7 @@ function buildTransactionRecord(formData) {
 
   return {
     id: generateTransactionId(),
-    status: formData.get("resultMode"),
+    status: "success",
     category: state.category === "fiat" ? "Fiat" : "Crypto",
     country: countryLabel,
     method: method.name,
