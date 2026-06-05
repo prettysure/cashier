@@ -501,7 +501,7 @@ const cryptoMethods = [
 const resultCopy = {
   success: {
     className: "success",
-    icon: "✓",
+    icon: "OK",
     title: "Payment successful",
     description: "Your payment was approved and the receipt has been sent to your email."
   },
