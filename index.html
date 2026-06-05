@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cashier Checkout</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero" aria-labelledby="cashier-title">
+        <div>
+          <p class="eyebrow">Secure cashier</p>
+          <h1 id="cashier-title">Choose how you want to pay</h1>
+          <p class="hero-copy">
+            Browse available fiat and crypto payment methods, filter local options
+            by billing country, and finish checkout in a guided flow.
+          </p>
+        </div>
+        <aside class="order-card" aria-label="Order summary">
+          <div>
+            <span class="muted">Order total</span>
+            <strong>$248.00</strong>
+          </div>
+          <div>
+            <span class="muted">Merchant</span>
+            <span>Acme Digital Goods</span>
+          </div>
+          <div>
+            <span class="muted">Reference</span>
+            <span id="orderReference">INV-240605</span>
+          </div>
+        </aside>
+      </section>
+
+      <section class="checkout-grid" id="checkoutView">
+        <div class="panel">
+          <div class="section-heading">
+            <p class="eyebrow">Step 1</p>
+            <h2>Select payment category</h2>
+          </div>
+
+          <div class="category-tabs" role="tablist" aria-label="Payment categories">
+            <button class="category-tab active" type="button" data-category="fiat" role="tab" aria-selected="true">
+              <span>Fiat payment methods</span>
+              <small>Cards, wallets, bank transfers, pay later</small>
+            </button>
+            <button class="category-tab" type="button" data-category="crypto" role="tab" aria-selected="false">
+              <span>Crypto payment methods</span>
+              <small>Coins, stablecoins, network payments</small>
+            </button>
+          </div>
+
+          <div class="country-filter" id="countryFilter">
+            <label for="billingCountry">Billing country</label>
+            <select id="billingCountry">
+              <option value="US">United States</option>
+              <option value="CN">China</option>
+              <option value="GB">United Kingdom</option>
+              <option value="EU">European Union</option>
+              <option value="CA">Canada</option>
+              <option value="AU">Australia</option>
+              <option value="IN">India</option>
+              <option value="BR">Brazil</option>
+              <option value="MX">Mexico</option>
+              <option value="JP">Japan</option>
+              <option value="KR">South Korea</option>
+              <option value="SG">Singapore</option>
+              <option value="AE">United Arab Emirates</option>
+              <option value="OTHER">Other countries</option>
+            </select>
+            <p id="countryHint" class="hint"></p>
+          </div>
+
+          <div class="section-heading compact">
+            <p class="eyebrow">Step 2</p>
+            <h2>Pick a payment method</h2>
+            <p class="hint">Click a payment method to open Step 3 and complete the required details.</p>
+          </div>
+          <div class="method-grid" id="methodGrid" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section class="result-panel hidden" id="resultView" aria-live="polite">
+        <div class="result-icon" id="resultIcon" aria-hidden="true"></div>
+        <p class="eyebrow" id="resultEyebrow">Payment result</p>
+        <h2 id="resultTitle"></h2>
+        <p id="resultDescription"></p>
+
+        <dl class="result-summary">
+          <div>
+            <dt>Payment method</dt>
+            <dd id="summaryMethod"></dd>
+          </div>
+          <div>
+            <dt>Amount</dt>
+            <dd>$248.00</dd>
+          </div>
+          <div>
+            <dt>Transaction ID</dt>
+            <dd id="summaryTransaction"></dd>
+          </div>
+          <div>
+            <dt>Status</dt>
+            <dd id="summaryStatus"></dd>
+          </div>
+        </dl>
+
+        <button class="secondary-button" type="button" id="newPaymentButton">
+          Make another payment
+        </button>
+      </section>
+
+      <div class="modal-backdrop hidden" id="paymentModal" role="dialog" aria-modal="true" aria-labelledby="paymentModalTitle">
+        <form class="modal-card" id="paymentForm">
+          <div class="modal-header">
+            <div>
+              <p class="eyebrow">Step 3</p>
+              <h2 id="paymentModalTitle">Complete payment details</h2>
+              <p class="hint" id="selectedMethodHint">Select a payment method to continue.</p>
+            </div>
+            <button class="icon-button" type="button" id="closeModalButton" aria-label="Close payment details">x</button>
+          </div>
+
+          <div id="dynamicFields" class="dynamic-fields"></div>
+
+          <label for="payerEmail">Receipt email</label>
+          <input id="payerEmail" name="payerEmail" type="email" placeholder="name@example.com" required>
+
+          <button class="submit-button" type="submit" id="submitButton">
+            Submit payment
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
