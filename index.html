@@ -111,37 +111,6 @@
         </button>
       </section>
 
-      <section class="panel history-panel" aria-labelledby="historyTitle">
-        <div class="section-heading">
-          <h2 id="historyTitle">Transaction records</h2>
-          <p class="hint">Every submitted attempt is saved in this browser and can be queried by transaction ID, method, email, status, or detail summary.</p>
-        </div>
-
-        <div class="history-actions">
-          <label for="transactionSearch">Search transactions</label>
-          <input id="transactionSearch" type="search" placeholder="Search by TX ID, email, method, or status">
-          <button class="secondary-button compact-button" type="button" id="clearHistoryButton">Clear demo records</button>
-        </div>
-
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Transaction ID</th>
-                <th>Status</th>
-                <th>Category</th>
-                <th>Country</th>
-                <th>Payment method</th>
-                <th>Email</th>
-                <th>Payment details</th>
-                <th>Created</th>
-              </tr>
-            </thead>
-            <tbody id="transactionTableBody"></tbody>
-          </table>
-        </div>
-      </section>
-
       <div class="modal-backdrop hidden" id="paymentModal" role="dialog" aria-modal="true" aria-labelledby="paymentModalTitle">
         <form class="modal-card" id="paymentForm">
           <div class="modal-header">

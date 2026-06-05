@@ -519,8 +519,6 @@ const resultCopy = {
   }
 };
 
-const STORAGE_KEY = "cashier-demo-transactions";
-
 const state = {
   category: "fiat",
   country: "US",
@@ -546,9 +544,6 @@ const summaryStatus = document.querySelector("#summaryStatus");
 const newPaymentButton = document.querySelector("#newPaymentButton");
 const paymentModal = document.querySelector("#paymentModal");
 const closeModalButton = document.querySelector("#closeModalButton");
-const transactionSearch = document.querySelector("#transactionSearch");
-const transactionTableBody = document.querySelector("#transactionTableBody");
-const clearHistoryButton = document.querySelector("#clearHistoryButton");
 
 function getVisibleMethods() {
   if (state.category === "crypto") {
@@ -723,149 +718,13 @@ function generateTransactionId() {
   return `TX-${timePart}-${randomPart}`;
 }
 
-function escapeHtml(value) {
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function maskCardNumber(value) {
-  const digits = String(value ?? "").replace(/\D/g, "");
-  if (digits.length < 4) {
-    return "Card details provided";
-  }
-
-  return `Card ending ${digits.slice(-4)}`;
-}
-
-function maskLongIdentifier(value) {
-  const text = String(value ?? "").trim();
-  if (text.length <= 10) {
-    return text || "Provided";
-  }
-
-  return `${text.slice(0, 6)}...${text.slice(-4)}`;
-}
-
-function summarizePaymentDetails(formData, method) {
-  if (method.fields === "card") {
-    return [
-      maskCardNumber(formData.get("cardNumber")),
-      `Name: ${formData.get("cardName")}`,
-      `Expiry: ${formData.get("cardExpiry")}`
-    ].join("; ");
-  }
-
-  if (method.fields === "authorize") {
-    return [
-      `Account: ${maskLongIdentifier(formData.get("accountId"))}`,
-      `Auth: ${maskLongIdentifier(formData.get("authorizationCode"))}`
-    ].join("; ");
-  }
-
-  if (method.fields === "identity") {
-    return [
-      `Name: ${formData.get("fullName")}`,
-      `Phone: ${maskLongIdentifier(formData.get("phoneNumber"))}`
-    ].join("; ");
-  }
-
-  if (method.fields === "bank") {
-    return [
-      `Bank: ${formData.get("bankName")}`,
-      `Reference: ${maskLongIdentifier(formData.get("accountReference"))}`
-    ].join("; ");
-  }
-
-  if (method.fields === "upi") {
-    return [
-      `UPI: ${maskLongIdentifier(formData.get("upiId"))}`,
-      `Approval: ${maskLongIdentifier(formData.get("upiAuthorization"))}`
-    ].join("; ");
-  }
-
-  return [
-    `Wallet: ${maskLongIdentifier(formData.get("walletAddress"))}`,
-    `Network: ${formData.get("network")}`,
-    `Hash: ${maskLongIdentifier(formData.get("transactionHash"))}`
-  ].join("; ");
-}
-
-function getTransactions() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) ?? [];
-  } catch {
-    return [];
-  }
-}
-
-function renderTransactions() {
-  const query = transactionSearch.value.trim().toLowerCase();
-  const filtered = getTransactions().filter((transaction) =>
-    [
-      transaction.id,
-      transaction.status,
-      transaction.category,
-      transaction.country,
-      transaction.method,
-      transaction.email,
-      transaction.details,
-      transaction.createdAt
-    ]
-      .join(" ")
-      .toLowerCase()
-      .includes(query)
-  );
-
-  if (filtered.length === 0) {
-    transactionTableBody.innerHTML = `
-      <tr>
-        <td class="empty-row" colspan="8">No matching transaction records yet.</td>
-      </tr>
-    `;
-    return;
-  }
-
-  transactionTableBody.innerHTML = filtered
-    .map(
-      (transaction) => `
-        <tr>
-          <td>${escapeHtml(transaction.id)}</td>
-          <td><span class="status-pill status-${escapeHtml(transaction.status)}">${escapeHtml(transaction.status)}</span></td>
-          <td>${escapeHtml(transaction.category)}</td>
-          <td>${escapeHtml(transaction.country)}</td>
-          <td>${escapeHtml(transaction.method)}</td>
-          <td>${escapeHtml(transaction.email)}</td>
-          <td>${escapeHtml(transaction.details)}</td>
-          <td>${escapeHtml(transaction.createdAt)}</td>
-        </tr>
-      `
-    )
-    .join("");
-}
-
-function saveTransaction(record) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify([record, ...getTransactions()]));
-  renderTransactions();
-}
-
-function buildTransactionRecord(formData) {
+function buildTransactionRecord() {
   const method = state.selectedMethod;
-  const countryLabel =
-    state.category === "fiat" ? fiatMethodsByCountry[state.country].label : "Not applicable";
 
   return {
     id: generateTransactionId(),
     status: "success",
-    category: state.category === "fiat" ? "Fiat" : "Crypto",
-    country: countryLabel,
-    method: method.name,
-    email: formData.get("payerEmail"),
-    details: summarizePaymentDetails(formData, method),
-    createdAt: new Date().toLocaleString()
+    method: method.name
   };
 }
 
@@ -912,8 +771,7 @@ paymentForm.addEventListener("submit", (event) => {
     return;
   }
 
-  const record = buildTransactionRecord(new FormData(paymentForm));
-  saveTransaction(record);
+  const record = buildTransactionRecord();
   showResult(record);
 });
 
@@ -942,13 +800,5 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-transactionSearch.addEventListener("input", renderTransactions);
-
-clearHistoryButton.addEventListener("click", () => {
-  localStorage.removeItem(STORAGE_KEY);
-  renderTransactions();
-});
-
 renderCountryHint();
 renderMethods();
-renderTransactions();

@@ -18,8 +18,6 @@ methods, complete payment details, and view a payment result state.
   method.
 - Successful payment result page after submitting payment details.
 - Automatic transaction ID generation for every submitted payment attempt.
-- Browser-local transaction records table with search for future queries. Demo
-  payment details are summarized and masked where appropriate.
 
 ## Preview
 
