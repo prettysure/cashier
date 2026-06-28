@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal Sign In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --surface-elevated: #243044;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f4f7fb;
+      --text-muted: #94a3b8;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --primary-glow: rgba(59, 130, 246, 0.35);
+      --success: #22c55e;
+      --error: #ef4444;
+      --radius: 12px;
+      --shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background-image:
+        radial-gradient(ellipse 80% 60% at 20% 0%, rgba(59, 130, 246, 0.18), transparent),
+        radial-gradient(ellipse 60% 50% at 100% 100%, rgba(99, 102, 241, 0.12), transparent);
+    }
+
+    .layout {
+      width: 100%;
+      max-width: 960px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    @media (max-width: 768px) {
+      .layout {
+        grid-template-columns: 1fr;
+        max-width: 440px;
+      }
+
+      .hero {
+        display: none;
+      }
+    }
+
+    .hero {
+      padding: 48px 40px;
+      background: linear-gradient(145deg, #1e3a5f 0%, #0f172a 55%, #1a2332 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), #6366f1);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .brand-name {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-content h1 {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+
+    .hero-content p {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 320px;
+    }
+
+    .hero-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .hero-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .hero-features svg {
+      flex-shrink: 0;
+      color: var(--success);
+    }
+
+    .panel {
+      padding: 48px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .panel-header {
+      margin-bottom: 32px;
+    }
+
+    .panel-header h2 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .panel-header p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .label-row label {
+      margin-bottom: 0;
+    }
+
+    .forgot-link {
+      font-size: 13px;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .forgot-link:hover {
+      text-decoration: underline;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    input::placeholder {
+      color: #64748b;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    input.error {
+      border-color: var(--error);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .toggle-password:hover {
+      color: var(--text);
+    }
+
+    .field-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .field-error {
+      font-size: 12px;
+      color: var(--error);
+      margin-top: 6px;
+      display: none;
+    }
+
+    .field-error.visible {
+      display: block;
+    }
+
+    /* Google Authenticator code */
+    .mfa-section {
+      margin-top: 8px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .mfa-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .mfa-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(59, 130, 246, 0.15);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .mfa-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .mfa-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .otp-inputs {
+      display: flex;
+      gap: 8px;
+      justify-content: space-between;
+    }
+
+    .otp-inputs input {
+      width: 100%;
+      max-width: 48px;
+      height: 52px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      padding: 0;
+    }
+
+    @media (max-width: 400px) {
+      .otp-inputs {
+        gap: 6px;
+      }
+
+      .otp-inputs input {
+        max-width: 42px;
+        height: 48px;
+        font-size: 20px;
+      }
+    }
+
+    .remember-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 24px 0;
+    }
+
+    .remember-row input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .remember-row label {
+      margin: 0;
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-weight: 400;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 14px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      color: #fff;
+      background: var(--primary);
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+
+    .btn-primary:active:not(:disabled) {
+      transform: scale(0.99);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn-primary .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    .btn-primary.loading .spinner {
+      display: block;
+    }
+
+    .btn-primary.loading .btn-text {
+      opacity: 0.85;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .footer-note {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .footer-note a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .footer-note a:hover {
+      text-decoration: underline;
+    }
+
+    .alert {
+      padding: 12px 14px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      margin-bottom: 20px;
+      display: none;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .alert.visible {
+      display: flex;
+    }
+
+    .alert-error {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+    }
+
+    .alert-success {
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #86efac;
+    }
+  </style>
+</head>
+<body>
+  <main class="layout" role="main">
+    <aside class="hero" aria-hidden="true">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">P</div>
+        <span class="brand-name">Portal</span>
+      </div>
+
+      <div class="hero-content">
+        <h1>Secure access to your workspace</h1>
+        <p>Sign in with your credentials and Google Authenticator code to continue.</p>
+      </div>
+
+      <ul class="hero-features">
+        <li>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M20 6L9 17l-5-5"/>
+          </svg>
+          End-to-end encrypted sessions
+        </li>
+        <li>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M20 6L9 17l-5-5"/>
+          </svg>
+          Two-factor authentication required
+        </li>
+        <li>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M20 6L9 17l-5-5"/>
+          </svg>
+          Role-based portal access
+        </li>
+      </ul>
+    </aside>
+
+    <section class="panel">
+      <header class="panel-header">
+        <h2>Sign in</h2>
+        <p>Enter your account details to access the portal.</p>
+      </header>
+
+      <div id="formAlert" class="alert alert-error" role="alert" aria-live="polite">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span id="alertMessage">Invalid credentials. Please try again.</span>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="you@company.com"
+            autocomplete="email"
+            required
+          />
+          <p class="field-error" id="emailError">Please enter a valid email address.</p>
+        </div>
+
+        <div class="form-group">
+          <div class="label-row">
+            <label for="password">Password</label>
+            <a href="#" class="forgot-link">Forgot password?</a>
+          </div>
+          <div class="input-wrap">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+              minlength="8"
+            />
+            <button type="button" class="toggle-password" id="togglePassword" aria-label="Show password">
+              <svg id="eyeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+          <p class="field-error" id="passwordError">Password must be at least 8 characters.</p>
+        </div>
+
+        <div class="mfa-section">
+          <div class="mfa-header">
+            <div class="mfa-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </div>
+            <div>
+              <p class="mfa-title">Google Authenticator code</p>
+              <p class="mfa-desc">Open Google Authenticator and enter the 6-digit code for this account.</p>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="otp-0" class="visually-hidden">Authentication code</label>
+            <div class="otp-inputs" id="otpInputs" role="group" aria-label="6-digit authentication code">
+              <input type="text" id="otp-0" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" aria-label="Digit 1" />
+              <input type="text" id="otp-1" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="Digit 2" />
+              <input type="text" id="otp-2" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="Digit 3" />
+              <input type="text" id="otp-3" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="Digit 4" />
+              <input type="text" id="otp-4" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="Digit 5" />
+              <input type="text" id="otp-5" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="Digit 6" />
+            </div>
+            <p class="field-hint">Codes refresh every 30 seconds.</p>
+            <p class="field-error" id="otpError">Please enter the complete 6-digit code.</p>
+          </div>
+        </div>
+
+        <div class="remember-row">
+          <input type="checkbox" id="remember" name="remember" />
+          <label for="remember">Trust this device for 30 days</label>
+        </div>
+
+        <button type="submit" class="btn-primary" id="submitBtn">
+          <span class="spinner" aria-hidden="true"></span>
+          <span class="btn-text">Sign in to Portal</span>
+        </button>
+      </form>
+
+      <p class="footer-note">
+        Need an account? <a href="#">Contact your administrator</a>
+      </p>
+    </section>
+  </main>
+
+  <style>
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+
+  <script>
+    const form = document.getElementById("loginForm");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
+    const submitBtn = document.getElementById("submitBtn");
+    const formAlert = document.getElementById("formAlert");
+    const alertMessage = document.getElementById("alertMessage");
+    const otpInputs = Array.from(document.querySelectorAll("#otpInputs input"));
+
+    // Password visibility toggle
+    togglePassword.addEventListener("click", () => {
+      const isPassword = passwordInput.type === "password";
+      passwordInput.type = isPassword ? "text" : "password";
+      togglePassword.setAttribute("aria-label", isPassword ? "Hide password" : "Show password");
+    });
+
+    // OTP input behavior: auto-advance, backspace, paste
+    otpInputs.forEach((input, index) => {
+      input.addEventListener("input", (e) => {
+        const value = e.target.value.replace(/\D/g, "");
+        e.target.value = value.slice(-1);
+
+        if (value && index < otpInputs.length - 1) {
+          otpInputs[index + 1].focus();
+        }
+        hideOtpError();
+      });
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Backspace" && !input.value && index > 0) {
+          otpInputs[index - 1].focus();
+        }
+        if (e.key === "ArrowLeft" && index > 0) otpInputs[index - 1].focus();
+        if (e.key === "ArrowRight" && index < otpInputs.length - 1) otpInputs[index + 1].focus();
+      });
+
+      input.addEventListener("paste", (e) => {
+        e.preventDefault();
+        const pasted = (e.clipboardData.getData("text") || "").replace(/\D/g, "").slice(0, 6);
+        pasted.split("").forEach((char, i) => {
+          if (otpInputs[i]) otpInputs[i].value = char;
+        });
+        const focusIndex = Math.min(pasted.length, otpInputs.length - 1);
+        otpInputs[focusIndex].focus();
+        hideOtpError();
+      });
+    });
+
+    function getOtpValue() {
+      return otpInputs.map((i) => i.value).join("");
+    }
+
+    function showError(input, errorEl, message) {
+      input.classList.add("error");
+      errorEl.textContent = message;
+      errorEl.classList.add("visible");
+    }
+
+    function hideError(input, errorEl) {
+      input.classList.remove("error");
+      errorEl.classList.remove("visible");
+    }
+
+    function hideOtpError() {
+      document.getElementById("otpError").classList.remove("visible");
+      otpInputs.forEach((i) => i.classList.remove("error"));
+    }
+
+    function showAlert(message, type = "error") {
+      alertMessage.textContent = message;
+      formAlert.className = `alert alert-${type} visible`;
+    }
+
+    function hideAlert() {
+      formAlert.classList.remove("visible");
+    }
+
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      hideAlert();
+
+      let valid = true;
+
+      if (!validateEmail(emailInput.value.trim())) {
+        showError(emailInput, document.getElementById("emailError"), "Please enter a valid email address.");
+        valid = false;
+      } else {
+        hideError(emailInput, document.getElementById("emailError"));
+      }
+
+      if (passwordInput.value.length < 8) {
+        showError(passwordInput, document.getElementById("passwordError"), "Password must be at least 8 characters.");
+        valid = false;
+      } else {
+        hideError(passwordInput, document.getElementById("passwordError"));
+      }
+
+      const otp = getOtpValue();
+      if (otp.length !== 6) {
+        document.getElementById("otpError").classList.add("visible");
+        otpInputs.forEach((i) => i.classList.add("error"));
+        valid = false;
+      } else {
+        hideOtpError();
+      }
+
+      if (!valid) return;
+
+      // Demo: simulate API call
+      submitBtn.disabled = true;
+      submitBtn.classList.add("loading");
+
+      await new Promise((r) => setTimeout(r, 1400));
+
+      submitBtn.disabled = false;
+      submitBtn.classList.remove("loading");
+
+      // Demo credentials for testing
+      const isDemoSuccess =
+        emailInput.value.trim() === "demo@portal.com" &&
+        passwordInput.value === "password123" &&
+        otp === "123456";
+
+      if (isDemoSuccess) {
+        showAlert("Sign in successful. Redirecting to dashboard…", "success");
+      } else {
+        showAlert("Invalid email, password, or authentication code. Please try again.", "error");
+      }
+    });
+  </script>
+</body>
+</html>
